@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title> @yield('title') </title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{{ asset('../../plugins/fontawesome-free/css/all.min.css')}}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- CDN Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{{ asset('../../dist/css/adminlte.min.css')}}">
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="{{ route('articles.index') }}" class="nav-link {{ request()->is('articles') ? 'activo' : '' }}">ZEE</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="{{ route('zone.show1') }}" class="nav-link {{ request()->is('zone*') ? 'activo' : '' }}">Zones</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="{{ route('list.mada') }}" class="nav-link {{ request()->is('listeMada') ? 'activo' : '' }}">Liste des données MADA</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="{{ route('peche.index') }}" class="nav-link {{ request()->is('peche') ? 'activo' : '' }}">Pêche</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="{{ route('mer_territorial.index') }}" class="nav-link {{ request()->is('mer_territorial') ? 'activo' : '' }}">Mer territorial</a>
+        </li>
+    </ul>
+
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+        @auth
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="{{ route('profile.edit') }}" class="nav-link text-primary">Modifier mes infos</a> 
+            </li>
+            @if(Auth::user()->is_super_admin)
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="{{ route('users.create') }}" class="nav-link text-success">Créer un compte</a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="{{ route('users.index') }}" class="nav-link text-info">Tous les utilisateurs</a>
+                </li>
+            @endif
+        @endauth
+        <li class="nav-item">
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit" class="btn btn-danger">Se déconnecter</button>
+            </form>
+        </li>
+    </ul>
+
+</nav>
+
+  <!-- /.navbar -->
+
+  <!-- Main Sidebar Container -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="#" class="brand-link">
+      <img src="{{ asset('images/aaaaaaaa.jpeg') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+
+      <span class="brand-text font-weight-light">APMF</span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <!-- Sidebar user (optional) -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+          <div class="image">
+            <!-- Si l'utilisateur possède une image de profil, utilisez-la, sinon affichez une image par défaut -->
+            <img src="{{ Auth::user()->profile_image ?? asset('dist/img/profil_vide.jpg') }}" class="img-circle elevation-2" alt="{{ Auth::user()->name }}">
+          </div>
+          
+          <div class="info">
+            <!-- Affichage du nom de l'utilisateur connecté -->
+            <a href="#" class="d-block">{{ Auth::user()->name }}</a>
+          </div>
+        </div>
+
+      <!-- SidebarSearch Form -->
+
+
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+               <li class="nav-item">
+                    <a href="{{ url('/dashboard') }}" class="nav-link {{ request()->is('dashboard*') ? 'activee' : '' }}">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>
+                            DASHBOARD
+                        </p>
+                    </a>
+                </li>
+
+            <li class="nav-item">
+                <a href="{{ url('/avurnav') }}" class="nav-link {{ request()->is('avurnav*') ? 'activee' : '' }}">
+                <!-- <i class="nav-icon fas fa-th"></i> -->
+                <i class="nav-icon fas fa-ship"></i>
+                <p>
+                    FORMAT AVURNAV
+                    <!-- <span class="right badge badge-danger">New</span> -->
+                </p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url('/pollutions') }}" class="nav-link {{ request()->is('pollution*') ? 'activee' : '' }}">
+                <!-- <i class="nav-icon fas fa-th"></i> -->
+                <i class="nav-icon fas fa-smog"></i>
+                <p>
+                    POLLUTIONS
+                    <!-- <span class="right badge badge-danger">New</span> -->
+                </p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url('/sitreps') }}" class="nav-link {{ request()->is('sitrep*') ? 'activee' : '' }}">
+                <!-- <i class="nav-icon fas fa-th"></i> -->
+                <i class="nav-icon fas fa-file-alt"></i>
+                <p>
+                    FORMAT SITREP
+                    <!-- <span class="right badge badge-danger">New</span> -->
+                </p>
+                </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{ route('bilan_sars.index') }}" class="nav-link {{ request()->is('bilan*') ? 'activee' : '' }}" class="nav-link">
+                  <i class="nav-icon fas fa-clipboard-list"></i>
+                  <p>
+                  BILAN SAR
+                  <i class="right fas fa-angle-left"></i>
+                  </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="{{ route('bilan_sars.index') }}" class="nav-link {{ request()->is('bilan_sars') ? 'activee' : '' }}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Liste BILAN SAR</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{ route('type_evenements.index') }}" class="nav-link {{ request()->is('bilan_sars/type_evenements*') ? 'activee' : '' }}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Types d'evenement</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{ route('cause_evenements.index') }}" class="nav-link {{ request()->is('bilan_sars/cause_evenements*') ? 'activee' : '' }}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Causes d'evenement</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{{ route('regions.index') }}" class="nav-link {{ request()->is('bilan_sars/region*') ? 'activee' : '' }}">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Region</p>
+                  </a>
+                </li>
+            </ul>
+            </li>
+            <li class="nav-item">
+              <a href="{{ url('/cabotage') }}" class="nav-link {{ request()->is('cabotage*') ? 'activee' : '' }}">
+                <i class="fas fa-anchor nav-icon"></i> 
+                <p>
+                    CABOTAGE 
+                </p>
+              </a>
+          </li>
+            <li class="nav-item">
+              <a href="{{ url('/vedette_sar') }}" class="nav-link {{ request()->is('vedette_sar*') ? 'activee' : '' }}">
+                <i class="fas fa-life-ring nav-icon"></i> 
+                    <p>
+                          VEDETTE SAR
+                    </p>
+              </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('passage_inoffensifs.index') }}" class="nav-link {{ request()->is('passage*') ? 'activee' : '' }}">
+                  <i class="fas fa-sailboat nav-icon"></i>
+                  <p>
+                      PASSAGE INOFENSIF 
+                  </p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('suivi_navire_particuliers.index') }}" class="nav-link {{ request()->is('suivi_navire*') ? 'activee' : '' }}">
+                  <i class="fas fa-ferry nav-icon"></i>
+                  <p>
+                    NAVIRE PARTICULIER
+                  </p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url('/rapports') }}" class="nav-link {{ request()->is('rapport*') ? 'activee' : '' }}">
+                  <i class="fas fa-chart-bar nav-icon"></i> 
+
+
+                  <p>
+                      RAPPORT 
+                  </p>
+                </a>
+            </li>
+            
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6 px-4">
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <!-- ETO NY MANARAKA -->
+        @yield('content')
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <footer class="main-footer">
+    <div class="float-right d-none d-sm-block">
+      <b>Version</b> 3.2.0
+    </div>
+    <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
+  </footer>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+<!-- script pour chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- jQuery -->
+<script src="{{ asset('../../plugins/jquery/jquery.min.js') }}"></script>
+<!-- Bootstrap 4 -->
+<script src="{{ asset('../../plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+<script src="{{ asset('../../plugins/chart.js/Chart.min.js') }}"></script>
+<!-- AdminLTE App -->
+<script src="{{ asset('../../dist/js/adminlte.min.js') }}"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="{{ asset('../../dist/js/demo.js') }}"></script>
+
+
+</body>
+<style>
+  .activee {
+    background-color:rgb(73, 80, 87);
+    color: white;
+  }
+  .activo {
+    border-bottom: 1px solid black;
+  }
+  
+</style>
+</html>
