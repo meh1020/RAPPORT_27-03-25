@@ -5,14 +5,21 @@
 @section('content')
 
 <div class="container-fluid px-4">
-    <div class="top-menu">
-        <button class="btn btn-success">
-            <a class="text-decoration-none text-white" href="{{ route('avurnav.create') }}">Créer AVURNAV</a>
-        </button>
+    <!-- Bloc combiné : Bouton de création et barre de recherche sur une même ligne -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <!-- Bouton Créer AVURNAV -->
+        <a class="btn btn-success text-white text-decoration-none" href="{{ route('avurnav.create') }}">
+            Créer AVURNAV
+        </a>
+        <!-- Barre de recherche alignée à droite -->
+        <form method="GET" action="{{ route('avurnav.index') }}" class="d-flex">
+            <input type="text" name="search" id="search" class="form-control me-2" style="width: 300px;" placeholder="Rechercher..." value="{{ request('search') }}">
+            <button type="submit" class="btn btn-outline-primary">Rechercher</button>
+        </form>
     </div>
+
     <h2 class="mb-4 text-center">🚢 Liste des Données AVURNAV</h2>
 
-    {{-- Affichage d'un éventuel message de succès --}}
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
@@ -94,7 +101,6 @@
                         <td class="text-center">
                             <div class="d-flex justify-content-center gap-2">
                                 <a href="{{ route('export.pdf', $avurnav->id) }}" class="btn btn-secondary btn-sm">Exporter</a>
-                                <!-- Vous pouvez décommenter ou ajouter d'autres actions ici -->
                                 <form action="" method="POST" onsubmit="return confirm('Voulez-vous vraiment supprimer cet élément ?');">
                                     @csrf
                                     @method('DELETE')
@@ -117,8 +123,8 @@
 
 <style>
     .pagination {
-        flex-wrap: wrap; /* Empêche le débordement */
-        justify-content: center; /* Centre la pagination */
+        flex-wrap: wrap;
+        justify-content: center;
     }
     .table {
         border-radius: 5px; /* Arrondi des bords du tableau */
@@ -133,4 +139,5 @@
         border-bottom-right-radius: 5px;
     }
 </style>
+
 @endsection

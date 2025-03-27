@@ -31,6 +31,22 @@ class AvurnavController extends Controller
         if ($request->filled('start_date') && $request->filled('end_date')) {
             $query->whereBetween('date', [$request->start_date, $request->end_date]);
         }
+        
+        // Filtre de recherche sur plusieurs colonnes incluant 'navire'
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->orWhere('avurnav_local', 'LIKE', '%' . $search . '%')
+                  ->orWhere('ile', 'LIKE', '%' . $search . '%')
+                  ->orWhere('vous_signale', 'LIKE', '%' . $search . '%')
+                  ->orWhere('position', 'LIKE', '%' . $search . '%')
+                  ->orWhere('navire', 'LIKE', '%' . $search . '%')
+                  ->orWhere('type', 'LIKE', '%' . $search . '%')
+                  ->orWhere('caracteristiques', 'LIKE', '%' . $search . '%')
+                  ->orWhere('zone', 'LIKE', '%' . $search . '%')
+                  ->orWhere('contacts', 'LIKE', '%' . $search . '%');
+            });
+        }
 
         // Tri par date décroissante
         $avurnavs = $query->orderBy('date', 'desc')->get();
