@@ -65,4 +65,34 @@ class DestinationController extends Controller
         return redirect()->route('destinations.index')
                          ->with('success', 'Destination supprimée avec succès.');
     }
+
+    public function importStore(Request $request)
+{
+    // Validation du fichier uploadé
+    $request->validate([
+        'file' => 'required|file|mimes:txt'
+    ]);
+
+    // Récupérer le contenu du fichier
+    $fileContent = file_get_contents($request->file('file')->getRealPath());
+
+    // Extraction de toutes les chaînes entre guillemets doubles directement sur tout le contenu
+    preg_match_all('/"([^"]+)"/', $fileContent, $matches);
+    if (empty($matches[1])) {
+        return redirect()->back()->with('error', 'Aucune destination trouvée dans le fichier.');
+    }
+    $destinationsArray = $matches[1];
+
+    $imported = 0;
+    // Boucle sur chaque destination extraite et insertion si elle n'existe pas déjà (comparaison sensible à la casse)
+    foreach ($destinationsArray as $destinationName) {
+        if (!Destination::whereRaw('BINARY name = ?', [$destinationName])->exists()) {
+            Destination::create(['name' => $destinationName]);
+            $imported++;
+        }
+    }
+
+    return redirect()->route('destinations.index')->with('success', "$imported destinations importées avec succès.");
+}
+
 }

@@ -5,17 +5,24 @@
 @section('content')
 
 <div class="container-fluid px-4">
-    <div class="top-menu">
-        <button class="btn btn-success">
-            <a class="text-decoration-none text-white" href="{{ route('pollutions.create') }}">Créer POLLUTION</a>
-        </button>
+    <!-- Bloc combiné : Bouton "Créer POLLUTION" et barre de recherche alignés sur la même ligne -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <!-- Bouton Créer POLLUTION -->
+        <a class="btn btn-success text-white text-decoration-none" href="{{ route('pollutions.create') }}">
+            Créer POLLUTION
+        </a>
+        <!-- Barre de recherche alignée à droite -->
+        <form method="GET" action="{{ route('pollutions.index') }}" class="d-flex">
+            <input type="text" name="search" id="search" class="form-control me-2" style="width: 300px;" placeholder="Rechercher..." value="{{ request('search') }}">
+            <button type="submit" class="btn btn-outline-primary">Rechercher</button>
+        </form>
     </div>
+
     <h2 class="mb-4 text-center">🌫️ Liste des Données POLLUTIONS</h2>
 
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
-
     {{-- Formulaire de filtre --}}
     <div class="card p-3 mb-4 shadow-sm">
         <form method="GET">
@@ -23,31 +30,26 @@
                 <!-- Filtre par année -->
                 <div class="col-md-3">
                     <label for="year">Année :</label>
-                    <input type="number" name="year" id="year" class="form-control" placeholder="YYYY" 
-                           value="{{ request('year') }}">
+                    <input type="number" name="year" id="year" class="form-control" placeholder="YYYY" value="{{ request('year') }}">
                 </div>
                 <!-- Filtre par mois -->
                 <div class="col-md-3">
                     <label for="month">Mois :</label>
-                    <input type="number" name="month" id="month" class="form-control" placeholder="MM" min="1" max="12" 
-                           value="{{ request('month') }}">
+                    <input type="number" name="month" id="month" class="form-control" placeholder="MM" min="1" max="12" value="{{ request('month') }}">
                 </div>
                 <!-- Filtre par jour -->
                 <div class="col-md-3">
                     <label for="day">Jour :</label>
-                    <input type="number" name="day" id="day" class="form-control" placeholder="DD" min="1" max="31" 
-                           value="{{ request('day') }}">
+                    <input type="number" name="day" id="day" class="form-control" placeholder="DD" min="1" max="31" value="{{ request('day') }}">
                 </div>
                 <!-- Filtre par intervalle de dates -->
                 <div class="col-md-3">
                     <label for="start_date">Date de début :</label>
-                    <input type="date" name="start_date" id="start_date" class="form-control" 
-                           value="{{ request('start_date') }}">
+                    <input type="date" name="start_date" id="start_date" class="form-control" value="{{ request('start_date') }}">
                 </div>
                 <div class="col-md-3 mt-2">
                     <label for="end_date">Date de fin :</label>
-                    <input type="date" name="end_date" id="end_date" class="form-control" 
-                           value="{{ request('end_date') }}">
+                    <input type="date" name="end_date" id="end_date" class="form-control" value="{{ request('end_date') }}">
                 </div>
                 <!-- Bouton Filtrer -->
                 <div class="col-md-3 mt-4 d-flex align-items-end">

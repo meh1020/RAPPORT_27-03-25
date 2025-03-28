@@ -6,7 +6,7 @@
     <style>
         body { font-family: Arial, sans-serif; font-size: 14px; }
         h1 { text-align: center; font-size: 20px; }
-        .highlight { background-color: yellow; font-weight: bold; }
+        .highlight { font-weight: bold; }
         .bold { font-weight: bold; }
         .contact { font-weight: bold; color: blue; }
         .title { font-weight: bold; text-decoration: underline; }

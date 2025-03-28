@@ -169,3 +169,8 @@ Route::group(['middleware' => 'auth'], function () {
     // PORTS
     Route::resource('ports', PortController::class)->except('show');
 });
+
+
+
+Route::post('/destinations/import', [DestinationController::class, 'importStore'])->name('destinations.import.store');
+

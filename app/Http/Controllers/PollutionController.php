@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Pollution;
@@ -31,8 +32,19 @@ class PollutionController extends Controller
         if ($request->filled('start_date') && $request->filled('end_date')) {
             $query->whereBetween('date', [$request->start_date, $request->end_date]);
         }
+        
+        // Filtre de recherche sur plusieurs colonnes : numero, zone, coordonnees et type_pollution
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->orWhere('numero', 'LIKE', '%' . $search . '%')
+                  ->orWhere('zone', 'LIKE', '%' . $search . '%')
+                  ->orWhere('coordonnees', 'LIKE', '%' . $search . '%')
+                  ->orWhere('type_pollution', 'LIKE', '%' . $search . '%');
+            });
+        }
 
-        // Vous pouvez trier et paginer les résultats si nécessaire
+        // Tri par date décroissante
         $pollutions = $query->orderBy('date', 'desc')->get();
 
         return view('surveillance.pollutions.index', compact('pollutions'));
