@@ -4,13 +4,20 @@
 
 @section('content')
 
-
 <div class="container-fluid px-4">
-    <div class="top-menu">
-        <button class="btn btn-success">
-            <a class="text-decoration-none text-white" href="{{ route('sitreps.create') }}">Créer SITREP</a>
-        </button>
+    <!-- Bloc combiné : Bouton "Créer SITREP" et barre de recherche alignés sur la même ligne -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <!-- Bouton Créer SITREP -->
+        <a class="btn btn-success text-white text-decoration-none" href="{{ route('sitreps.create') }}">
+            Créer SITREP
+        </a>
+        <!-- Barre de recherche alignée à droite -->
+        <form method="GET" action="{{ route('sitreps.index') }}" class="d-flex">
+            <input type="text" name="search" id="search" class="form-control me-2" style="width: 300px;" placeholder="Rechercher..." value="{{ request('search') }}">
+            <button type="submit" class="btn btn-outline-primary">Rechercher</button>
+        </form>
     </div>
+
     <h2 class="mb-4 text-center">📄 Liste des SITREPS</h2>
 
     {{-- Formulaire de filtre --}}
@@ -88,7 +95,7 @@
                         <td class="text-center">
                             <div class="d-flex justify-content-center gap-2">
                                 <a href="{{ route('sitreps.exportPDF', $sitrep->id) }}" class="btn btn-secondary btn-sm">Exporter</a>
-                                <form action="{{ route('sitreps.destroy', $sitrep->id) }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment supprimer cette pollution ?');">
+                                <form action="{{ route('sitreps.destroy', $sitrep->id) }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment supprimer ce SITREP ?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger btn-sm">
@@ -106,20 +113,17 @@
 
 <style>
     .table {
-        border-radius: 5px; /* Arrondi des bords du tableau à 5px */
+        border-radius: 5px; /* Arrondi des bords du tableau */
         overflow: hidden; /* Conserve l'arrondi des coins */
     }
-
     .table thead {
         border-top-left-radius: 5px;
         border-top-right-radius: 5px;
     }
-
     .table tbody {
         border-bottom-left-radius: 5px;
         border-bottom-right-radius: 5px;
     }
 </style>
-
 
 @endsection

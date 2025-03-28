@@ -31,8 +31,25 @@ class SitrepController extends Controller
         if ($request->filled('start_date') && $request->filled('end_date')) {
             $query->whereBetween('date', [$request->start_date, $request->end_date]);
         }
+        
+        // Filtre de recherche sur plusieurs colonnes
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->orWhere('sitrep_sar', 'LIKE', '%' . $search . '%')
+                  ->orWhere('mrcc_madagascar', 'LIKE', '%' . $search . '%')
+                  ->orWhere('event', 'LIKE', '%' . $search . '%')
+                  ->orWhere('situation', 'LIKE', '%' . $search . '%')
+                  ->orWhere('number_of_persons', 'LIKE', '%' . $search . '%')
+                  ->orWhere('assistance_required', 'LIKE', '%' . $search . '%')
+                  ->orWhere('coordinating_rcc', 'LIKE', '%' . $search . '%')
+                  ->orWhere('initial_action_taken', 'LIKE', '%' . $search . '%')
+                  ->orWhere('chronology', 'LIKE', '%' . $search . '%')
+                  ->orWhere('additional_information', 'LIKE', '%' . $search . '%');
+            });
+        }
 
-        // Tri par date décroissante (vous pouvez adapter la pagination si besoin)
+        // Tri par date décroissante (pagination ou get() selon vos besoins)
         $sitreps = $query->orderBy('date', 'desc')->get();
 
         return view('surveillance.sitreps.index', compact('sitreps'));
@@ -104,7 +121,6 @@ class SitrepController extends Controller
     {
         $sitrep = Sitrep::findOrFail($id);
         $pdf = Pdf::loadView('surveillance.sitreps.pdf', compact('sitrep'));
-        return $pdf->download('sitrep_'.$id.'.pdf');
+        return $pdf->download('sitrep_' . $id . '.pdf');
     }
 }
-
