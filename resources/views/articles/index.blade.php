@@ -15,26 +15,13 @@
             </div>
             <div>
                 <a href="{{ route('destinations.index') }}" class="btn btn-primary">
-                    Destinations mada
+                    <i class=""></i>Destinations mada
                 </a>
                 <a href="{{ route('ports.index') }}" class="btn btn-secondary">
-                    Ports mada
+                    <i class=""></i>Ports mada
                 </a>
             </div>
         </div>
-
-        <!-- Affichage des messages d'erreur et de succès -->
-        @if (session('error'))
-            <div class="alert alert-danger">
-                {{ session('error') }}
-            </div>
-        @endif
-
-        @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
 
         <!-- Formulaire d'import CSV -->
         <div class="card p-3 mb-4 shadow-sm">
@@ -42,14 +29,36 @@
                 @csrf
                 <div class="input-group">
                     <input type="file" name="csv_file" class="form-control" required>
-                    <button type="submit" class="btn btn-success">
-                        <i class="fas fa-upload"></i> Importer CSV
-                    </button>
+                    <button type="submit" class="btn btn-success"><i class="fas fa-upload"></i> Importer CSV</button>
                 </div>
             </form>
         </div>
 
-        <!-- Barre de recherche et autres actions éventuelles... -->
+
+        <!-- Barre de recherche -->
+        <form action="{{ route('articles.filter') }}" method="GET" class="d-flex mb-3 align-items-stretch">
+            <select name="filter" class="form-control me-2">
+                <option value="">Sélectionner un filtre</option>
+                <option value="destinationmada" {{ request('filter') == 'destinationmada' ? 'selected' : '' }}>Destination mada internationnal</option>
+                <option value="national" {{ request('filter') == 'national' ? 'selected' : '' }}>Destination mada national</option>
+                <option value="international" {{ request('filter') == 'international' ? 'selected' : '' }}>International</option>
+            </select>
+            <button type="submit" class="btn btn-info d-flex align-items-center"><i class="fas fa-filter me-1"></i> Filtrer</button>
+        </form>
+        
+
+
+
+        @if(request()->has('filter'))
+            <a href="{{ route('articles.export.filtered', ['filter' => request('filter')]) }}" class="btn btn-warning mb-3">
+                <i class="fas fa-file-export"></i> Exporter les résultats filtrés
+            </a>
+        @endif
+
+
+        @if (session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
 
         <!-- TABLE RESPONSIVE -->
         <div class="table-responsive">
@@ -70,7 +79,7 @@
                         <th>Longitude</th>
                         <th>Age</th>
                         <th>Time Of Fix</th>
-                        <th style="width: 120px;">Actions</th>
+                        <th style="width: 120px;">Actions</th> <!-- Agrandissement de la colonne -->
                     </tr>
                 </thead>
                 <tbody>
@@ -111,21 +120,27 @@
         <div class="d-flex justify-content-center mt-3">
             {{ $articles->links() }}
         </div>
-    </div>
+
+
+    
 
     <style>
+        
         .pagination {
             flex-wrap: wrap; /* Empêche le débordement */
             justify-content: center; /* Centre la pagination */
         }
+      
         .table {
             border-radius: 5px; /* Arrondi des bords du tableau à 5px */
             overflow: hidden; /* Conserve l'arrondi des coins */
         }
+
         .table thead {
             border-top-left-radius: 5px;
             border-top-right-radius: 5px;
         }
+
         .table tbody {
             border-bottom-left-radius: 5px;
             border-bottom-right-radius: 5px;
