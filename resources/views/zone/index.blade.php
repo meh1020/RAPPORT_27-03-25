@@ -6,6 +6,7 @@
 
     <div class="container-fluid px-4">
         <h2 class="mb-4 text-center">🚧 Zones </h2>
+        
         <!-- Boutons pour accéder aux zones -->
         <div class="d-flex justify-content-center flex-wrap gap-2 mb-4">
             @for ($i = 1; $i <= 9; $i++)
@@ -14,10 +15,19 @@
                 </a>
             @endfor
         </div>
-        
 
+        <!-- Message de succès -->
         @if (session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        <!-- Message d'erreur -->
+        @if (session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
         @endif
 
         <!-- Formulaire d'import CSV -->
@@ -26,7 +36,9 @@
                 @csrf
                 <div class="input-group">
                     <input type="file" name="csv_file" class="form-control" required>
-                    <button type="submit" class="btn btn-success"><i class="fas fa-upload"></i> Importer CSV</button>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-upload"></i> Importer CSV
+                    </button>
                 </div>
             </form>
         </div>
@@ -72,7 +84,7 @@
                             <td><small>{{ $article->time_of_fix }}</small></td>
                             <td class="text-center">
                                 <div class="d-flex justify-content-center gap-2">
-                                    <form action="{{ route('articles.destroy', $article->id) }}" method="POST">
+                                    <form action="{{ route('zone.destroy', ['id' => $id, 'recordId' => $article->id]) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-sm">
@@ -92,24 +104,24 @@
             {{ $articles->links() }}
         </div>
 
-    <style>
-        .pagination {
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .table {
-            border-radius: 5px; /* Arrondi des bords du tableau à 5px */
-            overflow: hidden; /* Conserve l'arrondi des coins */
-        }
+        <style>
+            .pagination {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .table {
+                border-radius: 5px;
+                overflow: hidden;
+            }
+            .table thead {
+                border-top-left-radius: 5px;
+                border-top-right-radius: 5px;
+            }
+            .table tbody {
+                border-bottom-left-radius: 5px;
+                border-bottom-right-radius: 5px;
+            }
+        </style>
+    </div>
 
-        .table thead {
-            border-top-left-radius: 5px;
-            border-top-right-radius: 5px;
-        }
-
-        .table tbody {
-            border-bottom-left-radius: 5px;
-            border-bottom-right-radius: 5px;
-        }
-    </style>
 @endsection

@@ -118,6 +118,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/zone/{id}', [ZoneController::class, 'show'])->name('zone.show');
     Route::get('/zone/1', [ZoneController::class, 'show'])->name('zone.show1');
     Route::post('/import-articles/{id}', [ZoneController::class, 'importCSV'])->name('zone.import');
+    Route::delete('zone/{id}/{recordId}', [ZoneController::class, 'destroy'])->name('zone.destroy');
 
     // TYPE ET CAUSE EVENEMENT
     Route::prefix('bilan_sars')->group(function () {
